@@ -4,7 +4,9 @@
 User-Friendly CLI tool to communicate with the bootlaoder
 """
 
+import logging
 import sys
+from logging.config import dictConfig
 from uvrconnection import UvrConnection
 from uvrerrors import *
 
@@ -13,6 +15,35 @@ __copyright__ = "Copyright 2015"
 __license__ = "GPL"
 __maintainer__ = "Dominic Miglar"
 __email__ = "dominic.miglar@w1r3.net"
+
+LOGGING_CONFIG = {
+        'version': 1,
+        'disable_existing_loggers': False,
+        'root': {
+                'handlers': ['console',],
+                'level': 'DEBUG',
+            },
+        'formatters': {
+            'simple': {
+                'format': '%(asctime)s - %(name)s - %(levelname)s - %(lineno)s - %(funcName)s - %(message)s',
+                 'datefmt': '%Y %b %d, %H:%M:%S',
+                },
+            },
+        'handlers': {
+            'console': {
+                'level': 'DEBUG',
+                'class': 'logging.StreamHandler',
+                'formatter': 'simple'
+            },
+            #'main_file': {
+            #    'level': 'DEBUG',
+            #    'class': 'logging.handlers.RotatingFileHandler',
+            #    'filename': 'main_file.log',
+            #    'formatter': 'simple',
+            #    'maxBytes': 1024*1024,
+            #},
+        },
+    }
 
 def print_usage():
     print('Usage: %s [getfirmware|getlatest|getdata|resetdata]' % sys.argv[0])
@@ -101,4 +132,5 @@ def main():
 
 
 if __name__ == "__main__":
+    dictConfig(LOGGING_CONFIG)
     main()

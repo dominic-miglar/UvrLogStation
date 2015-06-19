@@ -13,7 +13,7 @@ __license__ = "GPL"
 __maintainer__ = "Dominic Miglar"
 __email__ = "dominic.miglar@w1r3.net"
 
-class UvrLogSysClient(object):
+class UvrLogClient(object):
     def __init__(self, backend_url, controller_name, username=None, password=None):
         self.backend_url = backend_url
         if self.backend_url[-1] != '/':
@@ -31,6 +31,9 @@ class UvrLogSysClient(object):
         if(http_response.status_code != requests.codes.ok):
             raise UvrResponseError(message='An error occurred while getting the controller id.',
                 response_code = http_response.status_code, response_text=http_response.text)
+        if not http_response.json():
+            raise UvrControllerDoesNotExistError(message='Controller with name %s does not exist at backend!' %
+                self.controller_name)
         controller = http_response.json()[0]
         self.controller_id = controller['id']
         return self.controller_id
@@ -46,12 +49,18 @@ class UvrLogSysClient(object):
         return True
 
 
-class UvrLogSysError(Exception):
+class UvrLogError(Exception):
     pass
 
-class UvrResponseError(UvrLogSysError):
+class UvrControllerDoesNotExistError(UvrLogError):
+    def __init__(self, message):
+        self.message = message
+        super(UvrControllerDoesNotExistError, self).__init__(message)
+
+
+class UvrResponseError(UvrLogError):
     def __init__(self, message, response_code, response_text):
         self.message = message
         self.response_code = response_code
         self.response_text = response_text
-        super(UvrLogSysError, self).__init__(message)
+        super(UvrResponseError, self).__init__(message)

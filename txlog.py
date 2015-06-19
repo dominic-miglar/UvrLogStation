@@ -14,7 +14,7 @@ import logging
 from logging.config import dictConfig
 import socket
 from uvrlogreader import UvrLogReader
-from uvrlogsysclient import UvrLogSysClient, UvrLogSysError, UvrResponseError
+from uvrlogclient import UvrLogClient, UvrLogError, UvrResponseError
 from UvrSocketIo.uvrerrors import *
 
 __author__ = "Dominic Miglar"
@@ -85,7 +85,7 @@ def main():
 
     try:
         uvrlogreader = UvrLogReader(configuration['controller']['ip'], configuration['controller']['port'])
-        uvrlogsysclient = UvrLogSysClient(configuration['backend']['url'],
+        uvrlogclient = UvrLogClient(configuration['backend']['url'],
             configuration['backend']['ctrlname'])
         logger.info('Getting logged data from %s:%d' % (uvrlogreader.uvrhost, uvrlogreader.uvrport))
         logdata = uvrlogreader.getData()
@@ -95,7 +95,7 @@ def main():
             logger.info('No logging data available! Exiting..')
             sys.exit()
         logger.info('Sending logged data to backend host')
-        if(uvrlogsysclient.postUvrData(logdata)):
+        if(uvrlogclient.postUvrData(logdata)):
             logger.info('Data sent to backend server successfully!')
             logger.info('Reset data log flash on BL-NET')
             uvrlogreader.resetData()
@@ -114,7 +114,7 @@ def main():
     except UvrError as e:
         logger.error(e.message)
         sys.exit(e.message)
-    except UvrLogSysError as e:
+    except UvrLogError as e:
         logger.error(e.message)
         sys.exit(e.message)
     except Exception as e:

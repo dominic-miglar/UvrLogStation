@@ -1,0 +1,61 @@
+# do not include local settings in git repo
+local_settings.py
+
+# do not include .idea editor preferences
+.idea/
+
+# logs
+*.log
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+
+# DB migrations
+migrations/
+
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+env/
+build/
+develop-eggs/
+dist/
+eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.coverage
+.cache
+nosetests.xml
+coverage.xml
+
+# Translations
+*.mo
+*.pot
+
+# Django stuff:
+*.log
+
+# Sphinx documentation
+docs/_build/
+
+# SQLite DB 
+*.sqlite
+*.sqlite3
+
